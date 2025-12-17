@@ -1,15 +1,17 @@
 import { useNavigate } from 'react-router-dom';
-import { 
-  FileText, 
-  Zap, 
-  Shield, 
-  CheckCircle, 
-  ArrowRight, 
+import {
+  FileText,
+  Zap,
+  Shield,
+  CheckCircle,
+  ArrowRight,
   Star,
   TrendingUp,
   Clock,
   DollarSign
 } from 'lucide-react';
+
+import image  from './assets/prevengoLogo-noBG.png';
 
 export default function LandingPage() {
   const navigate = useNavigate();
@@ -20,6 +22,10 @@ export default function LandingPage() {
 
   const handleLogin = () => {
     navigate('/login');
+  };
+
+  const goHome = () => {
+    navigate('/');
   };
 
   const features = [
@@ -90,9 +96,15 @@ export default function LandingPage() {
       {/* Navigation */}
       <nav className="container mx-auto px-4 py-6 flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <FileText className="w-8 h-8 text-emerald-400" />
-          <span className="text-2xl font-bold">Prevengo</span>
+          <img
+            src={image}
+            width={500}
+            alt="Prevengo logo"
+            className="w-72 h-24 object-contain"
+            onClick={goHome}
+          />
         </div>
+
         <button
           onClick={handleLogin}
           className="px-6 py-2 bg-emerald-500 hover:bg-emerald-600 rounded-lg font-medium transition-colors"
@@ -107,15 +119,15 @@ export default function LandingPage() {
           <div className="inline-block px-4 py-2 bg-emerald-500/20 border border-emerald-400/30 rounded-full text-emerald-300 text-sm font-medium mb-6">
             ✨ La soluzione più semplice per i preventivi
           </div>
-          
+
           <h1 className="text-5xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-emerald-100 to-blue-200 bg-clip-text text-transparent">
             Preventivi Professionali
             <br />
             <span className="text-emerald-400">In Un Click</span>
           </h1>
-          
+
           <p className="text-xl md:text-2xl text-slate-300 mb-10 max-w-2xl mx-auto">
-            Crea preventivi eleganti e personalizzati in pochi secondi. 
+            Crea preventivi eleganti e personalizzati in pochi secondi.
             Niente più template complicati o software costosi.
           </p>
 
