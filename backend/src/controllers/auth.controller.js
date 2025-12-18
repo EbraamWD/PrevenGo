@@ -4,13 +4,13 @@ import jwt from "jsonwebtoken";
 
 export const register = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, companyName } = req.body;
     const exists = await User.findOne({ email });
     if (exists) return res.status(400).json({ msg: "User already exists" });
 
     const hashed = await bcrypt.hash(password, 10);
 
-    const user = await User.create({ email, password: hashed });
+    const user = await User.create({ email, password: hashed, companyName });
 
     // Generate token for automatic login after registration
     const token = jwt.sign(
@@ -22,7 +22,7 @@ export const register = async (req, res) => {
     res.json({
       msg: "Registered",
       token,
-      user: { id: user._id, email: user.email }
+      user: { id: user._id, email: user.email, companyName: user.companyName }
     });
   } catch (err) {
     res.status(500).json({ msg: "Server error" });

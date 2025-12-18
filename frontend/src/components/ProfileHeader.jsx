@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { User, Building2, Upload, X, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
-
+import { useEffect } from 'react';
 function ProfileHeader() {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [companyName, setCompanyName] = useState('La Mia Azienda');
+  const [companyName, setCompanyName] = useState('');
   const [logo, setLogo] = useState(null);
   const [logoPreview, setLogoPreview] = useState(null);
   const { logout, user } = useAuth();
@@ -16,6 +16,12 @@ function ProfileHeader() {
     navigate('/login');
   };
 
+  useEffect(() => {
+    if (user?.companyName) {
+      setCompanyName(user.companyName);
+    }
+  }, [user]);
+  
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -66,7 +72,7 @@ function ProfileHeader() {
             </div>
             <User className="w-4 h-4 text-slate-400" />
           </button>
-          
+
           <button
             onClick={handleLogout}
             className="flex items-center gap-2 px-4 py-2 bg-rose-600 hover:bg-rose-700 rounded-lg border border-rose-700 transition-colors text-white"
@@ -117,7 +123,7 @@ function ProfileHeader() {
                 <label className="block text-sm font-medium text-slate-300 mb-2">
                   Logo Aziendale
                 </label>
-                
+
                 {/* Preview */}
                 {logoPreview && (
                   <div className="mb-3 p-4 bg-slate-900 rounded-lg border border-slate-700 flex items-center justify-center">

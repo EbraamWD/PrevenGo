@@ -2,13 +2,14 @@ import express from "express";
 import cors from "cors";
 import authRoutes from "./routes/auth.routes.js";
 import quoteRoutes from "./routes/quotes.js";
-
+import dotenv from 'dotenv';
+dotenv.config();
 const app = express();
-
+console.log('ora controllo gli allowed origins ', process.env.ALLOWED_ORIGINS);
 // CORS configuration - supports multiple origins
 const allowedOrigins = process.env.ALLOWED_ORIGINS 
     ? process.env.ALLOWED_ORIGINS.split(',')
-    : ['http://localhost:3000'];
+    : ['http://localhost:5001'];
 
 const corsOptions = {
     origin: function (origin, callback) {

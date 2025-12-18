@@ -61,9 +61,9 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const register = async (email, password) => {
+  const register = async (email, password, companyName) => {
     try {
-      const response = await api.post('/auth/register', { email, password });
+      const response = await api.post('/auth/register', { email, password, companyName });
       const { token: newToken, user: userData } = response.data;
       
       // If register returns token, login automatically
