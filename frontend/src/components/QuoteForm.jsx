@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-
+import api from "../api";
 const currency = new Intl.NumberFormat("it-IT", { style: "currency", currency: "EUR" });
 
 export default function QuoteForm() {
@@ -40,18 +40,18 @@ export default function QuoteForm() {
     if (logo) formData.append("logo", logo);
 
     try {
-      // const res = await api.post("/quotes", formData);
-      // const quoteId = res.data._id;
-      // const pdfRes = await api.get(`/quotes/${quoteId}/pdf`, { responseType: "blob" });
-      // const url = window.URL.createObjectURL(new Blob([pdfRes.data], { type: "application/pdf" }));
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.setAttribute("download", `quote-${quoteId}.pdf`);
-      // document.body.appendChild(link);
-      // link.click();
-      // link.remove();
+      const res = await api.post("/quotes", formData);
+      const quoteId = res.data._id;
+      const pdfRes = await api.get(`/quotes/${quoteId}/pdf`, { responseType: "blob" });
+      const url = window.URL.createObjectURL(new Blob([pdfRes.data], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `quote-${quoteId}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
 
-      alert("Preventivo generato e PDF scaricato!");
+      //alert("Preventivo generato e PDF scaricato!");
     } catch (err) {
       console.error(err);
       alert("Errore nella generazione del preventivo");
