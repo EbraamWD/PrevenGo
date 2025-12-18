@@ -5,6 +5,8 @@ import { useAuth } from '../context/AuthContext';
 export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+  const [companyName, setCompanyName] = useState('');
   const [isRegister, setIsRegister] = useState(false);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -21,10 +23,23 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
+    
+    // Validazione per la registrazione
+    if (isRegister) {
+      if (!companyName.trim()) {
+        setError('Il nome dell\'azienda è obbligatorio');
+        return;
+      }
+      if (password !== confirmPassword) {
+        setError('Le password non coincidono');
+        return;
+      }
+    }
+    
     setLoading(true);
 
     const result = isRegister 
-      ? await register(email, password)
+      ? await register(email, password, companyName)
       : await login(email, password);
 
     setLoading(false);
@@ -54,6 +69,22 @@ export default function Login() {
           )}
 
           <form onSubmit={handleSubmit} className="space-y-6">
+            {isRegister && (
+              <div>
+                <label className="block text-sm font-medium text-slate-200 mb-2">
+                  Nome Azienda
+                </label>
+                <input
+                  type="text"
+                  value={companyName}
+                  onChange={(e) => setCompanyName(e.target.value)}
+                  required
+                  className="w-full rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/60 focus:ring-2 focus:ring-emerald-400/30 outline-none"
+                  placeholder="Nome della tua azienda"
+                />
+              </div>
+            )}
+
             <div>
               <label className="block text-sm font-medium text-slate-200 mb-2">
                 Email
@@ -83,6 +114,23 @@ export default function Login() {
               />
             </div>
 
+            {isRegister && (
+              <div>
+                <label className="block text-sm font-medium text-slate-200 mb-2">
+                  Conferma Password
+                </label>
+                <input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                  minLength={6}
+                  className="w-full rounded-xl border border-white/10 bg-slate-900/60 px-4 py-3 text-white placeholder:text-slate-500 focus:border-emerald-400/60 focus:ring-2 focus:ring-emerald-400/30 outline-none"
+                  placeholder="••••••••"
+                />
+              </div>
+            )}
+
             <button
               type="submit"
               disabled={loading}
@@ -98,6 +146,8 @@ export default function Login() {
               onClick={() => {
                 setIsRegister(!isRegister);
                 setError('');
+                setCompanyName('');
+                setConfirmPassword('');
               }}
               className="text-sm text-emerald-300 hover:text-emerald-200 transition"
             >
@@ -111,4 +161,3 @@ export default function Login() {
     </div>
   );
 }
-
