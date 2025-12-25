@@ -3,7 +3,7 @@ import { User, Building2, Upload, X, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
-
+import toast from 'react-hot-toast';
 function ProfileHeader() {
   const { logout, user, setUser } = useAuth();
   const navigate = useNavigate();
@@ -32,7 +32,7 @@ function ProfileHeader() {
 
     const initial = {
       companyName: user.companyName || '',
-      address: user.address || '', // FIX: era user.address
+      address: user.address || '',
       vatNumber: user.vatNumber || '',
       logoPreview: user.logoUrl || null
     };
@@ -74,7 +74,7 @@ function ProfileHeader() {
     }
     
     if (address !== initialData.address) {
-      formData.append('address', address); // FIX: era 'companyAddress', ora corrisponde al controller
+      formData.append('address', address);
     }
     
     if (vatNumber !== initialData.vatNumber) {
@@ -88,6 +88,7 @@ function ProfileHeader() {
 
     // Se non ci sono modifiche, non inviare la richiesta
     if (!hasChanges) {
+      toast('Nessuna modifica da salvare', { icon: 'ℹ️' });
       setIsModalOpen(false);
       return;
     }
@@ -106,21 +107,21 @@ function ProfileHeader() {
         }
       });
       
-      setUser(res.data.company);
-      
       // Aggiorna i dati iniziali dopo il salvataggio
       setInitialData({
         companyName: res.data.company.companyName || '',
-        address: res.data.company.address || '', // FIX: ora usa 'address' coerentemente
+        address: res.data.company.address || '',
         vatNumber: res.data.company.vatNumber || '',
         logoPreview: res.data.company.companyLogo || null
       });
       
       setLogo(null);
       setIsModalOpen(false);
+      toast.success('Profilo aziendale aggiornato con successo!');
     } catch (error) {
       console.error("Errore nel salvataggio:", error);
       console.error("Response data:", error.response?.data);
+      toast.error('Errore durante l\'aggiornamento del profilo aziendale.');
     }
   };
 
@@ -184,8 +185,8 @@ function ProfileHeader() {
 
       {/* MODAL */}
       {isModalOpen && (
-        <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-50 p-4">
-          <div className="bg-slate-800 rounded-xl border border-slate-700 w-full max-w-md">
+        <div className="fixed inset-0 bg-black/70 flex items-start justify-center z-50 p-4 overflow-y-auto">
+          <div className="bg-slate-800 rounded-xl border border-slate-700 w-full max-w-md my-8 sm:my-16">
             {/* Header */}
             <div className="flex justify-between items-center p-6 border-b border-slate-700">
               <h2 className="text-xl font-semibold text-white flex items-center gap-2">
