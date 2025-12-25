@@ -5,7 +5,7 @@ const currency = new Intl.NumberFormat("it-IT", { style: "currency", currency: "
 export default function QuoteForm() {
   const [customerName, setCustomerName] = useState("");
   const [customerEmail, setCustomerEmail] = useState("");
-  const [items, setItems] = useState([{ description: "", quantity: 1, unitPrice: 0 }]);
+  const [items, setItems] = useState([{ description: "", quantity: 1, unitPrice: "" }]);
   const [logo, setLogo] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -160,7 +160,7 @@ export default function QuoteForm() {
                       {/* Description - Full Width */}
                       <div className="space-y-2">
                         <label className="text-xs text-slate-400">Descrizione</label>
-                        <input
+                        <textarea
                           type="text"
                           placeholder="Es. Consulenza, licenza, pacchetto ore"
                           value={item.description}

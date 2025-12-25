@@ -1,7 +1,6 @@
 import User from "../models/User.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-
 export const register = async (req, res) => {
   try {
     const { email, password, companyName } = req.body;
@@ -59,7 +58,8 @@ export const getMe = async (req, res) => {
   try {
     // User is already attached by authenticate middleware
     res.json({
-      user: { id: req.user._id, email: req.user.email, companyName: req.user.companyName }
+      user: { id: req.user._id, email: req.user.email, companyName: req.user.companyName, logoUrl: req.user.logoUrl, 
+        address: req.user.companyAddress, vatNumber: req.user.vatNumber }
     });
   } catch (err) {
     res.status(500).json({ msg: "Server error" });

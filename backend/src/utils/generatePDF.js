@@ -93,7 +93,7 @@ export const generatePDF = async (quote, options = { save: false }) => {
             doc.fontSize(9)
                .font('Helvetica')
                .fillColor('#4b5563')
-               .text(quote.companyAddress || 'Via/Piazza, Numero', companyDataX, yPosition + 16)
+               .text(quote.address || '', companyDataX, yPosition + 16)
                .text(`${quote.companyCAP || 'CAP'} ${quote.companyCity || 'Città'} (${quote.companyProvince || 'PR'})`, companyDataX, yPosition + 28)
                .text(`P.IVA: ${quote.companyVAT || 'IT00000000000'}`, companyDataX, yPosition + 40)
                .text(`Tel: ${quote.companyPhone || '+39 000 0000000'}`, companyDataX, yPosition + 52);

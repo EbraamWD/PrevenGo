@@ -139,4 +139,29 @@ router.get('/:id/pdf', authenticate, async (req, res) => {
     }
 });
 
+router.post('/companyProfile', authenticate, upload.single("logo"), async (req, res) => {
+    try {
+        console.log("Received file:", req);
+        const userId = req.user.id;
+        const file = req.file;
+
+        if (!file) {
+            return res.status(400).json({ msg: "No file uploaded" });
+        }
+
+        const logoUrl = await cloudinaryService.uploadLogo(file);
+
+        // Update user's logoUrl in the database
+        await User.findByIdAndUpdate(userId, { logoUrl });
+
+        // Delete the temporary file
+        fs.unlinkSync(file.path);
+
+        res.json({ msg: "Logo uploaded successfully", logoUrl });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Server error" });
+    }
+});
+
 export default router;

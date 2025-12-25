@@ -17,6 +17,14 @@ const userSchema = new mongoose.Schema({
     logoUrl: {
         type: String,
         default: ""
+    },
+    companyAddress: {
+        type: String,
+        default: ""
+    },
+    vatNumber: {
+        type: String,
+        default: ""
     }
 });
 
