@@ -8,17 +8,19 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-export const cloudinaryService = {
+const cloudinaryService = {
   async uploadLogo(file) {
     const result = await cloudinary.uploader.upload(file.path, {
       folder: 'prevengo/logos',
       use_filename: true,
       unique_filename: true
     });
-    return result.secure_url; // questo è l'URL che salverai in Mongo
+    return result.secure_url;
   },
 
   async deleteFile(publicId) {
     await cloudinary.uploader.destroy(publicId);
   }
 };
+
+export default cloudinaryService;

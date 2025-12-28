@@ -1,5 +1,7 @@
 import express from 'express';
 import Quote from '../models/Quotes.js';
+import User from '../models/User.js';
+import cloudinaryService from '../services/cloudinary.service.js';
 import { generatePDF } from '../utils/generatePDF.js';
 import multer from 'multer';
 import fs from 'fs';
@@ -123,7 +125,12 @@ router.get('/:id/pdf', authenticate, async (req, res) => {
             return res.status(403).json({ msg: "Access denied. This quote does not belong to you." });
         }
 
-        const { pdfBuffer } = await generatePDF(quote, { save: true });
+        const user = await User.findById(req.user._id);
+        if (!user) {
+            return res.status(404).json({ msg: "User not found" });
+        }
+
+        const { pdfBuffer } = await generatePDF(quote, user, { save: true });
 
         // Set CORS headers for PDF download
         const origin = getAllowedOrigin(req.headers.origin);

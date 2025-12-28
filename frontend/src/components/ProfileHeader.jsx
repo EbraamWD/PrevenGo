@@ -1,9 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { User, Building2, Upload, X, LogOut } from 'lucide-react';
+import { User, Building2, Upload, X, LogOut, AlertCircle } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
 import toast from 'react-hot-toast';
+import siteLogo from './assets/prevengoLogo-noBG.png';
+import { ReactComponent as Logo } from './assets/logoFinalSVG.svg';
+import { ReactComponent as LogoText } from './assets/newLogoText.svg';
+
 function ProfileHeader() {
   const { logout, user, setUser } = useAuth();
   const navigate = useNavigate();
@@ -14,7 +18,7 @@ function ProfileHeader() {
   const [logoPreview, setLogoPreview] = useState(null);
   const [address, setAddress] = useState('');
   const [vatNumber, setVatNumber] = useState('');
-  
+
   const [initialData, setInitialData] = useState({
     companyName: '',
     address: '',
@@ -25,6 +29,9 @@ function ProfileHeader() {
   const handleLogout = () => {
     logout();
     navigate('/login');
+  };
+  const goToHistory = () => {
+    navigate('/history');
   };
 
   useEffect(() => {
@@ -45,11 +52,14 @@ function ProfileHeader() {
   }, [user]);
 
   // Verifica se ci sono modifiche
-  const hasChanges = 
+  const hasChanges =
     companyName !== initialData.companyName ||
     address !== initialData.address ||
     vatNumber !== initialData.vatNumber ||
     logo !== null;
+
+  // Verifica se i dati sono incompleti
+  const isIncomplete = !companyName || !address || !vatNumber || !logoPreview;
 
   const handleLogoChange = (e) => {
     const file = e.target.files[0];
@@ -67,20 +77,20 @@ function ProfileHeader() {
   const handleSave = async () => {
     const formData = new FormData();
     console.log("Handle save called");
-    
+
     // Aggiungi solo i campi modificati
     if (companyName !== initialData.companyName) {
       formData.append('companyName', companyName);
     }
-    
+
     if (address !== initialData.address) {
       formData.append('address', address);
     }
-    
+
     if (vatNumber !== initialData.vatNumber) {
       formData.append('vatNumber', vatNumber);
     }
-    
+
     if (logo) {
       console.log("Adding logo to formData", logo);
       formData.append('logo', logo);
@@ -95,18 +105,18 @@ function ProfileHeader() {
 
     try {
       console.log("Submitting modified fields only");
-      
+
       // Debug: mostra tutti i campi nel FormData
       for (let pair of formData.entries()) {
         console.log(pair[0], pair[1]);
       }
-      
+
       const res = await api.post('/auth/companyProfile', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
-      
+
       // Aggiorna i dati iniziali dopo il salvataggio
       setInitialData({
         companyName: res.data.company.companyName || '',
@@ -114,7 +124,7 @@ function ProfileHeader() {
         vatNumber: res.data.company.vatNumber || '',
         logoPreview: res.data.company.companyLogo || null
       });
-      
+
       setLogo(null);
       setIsModalOpen(false);
       toast.success('Profilo aziendale aggiornato con successo!');
@@ -131,11 +141,13 @@ function ProfileHeader() {
       <header className="mb-6 sm:mb-8">
         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
           <div className="flex-1">
-            <p className="text-xs sm:text-sm uppercase tracking-[0.2em] text-slate-400">
-              Prevengo
-            </p>
+            <div className="flex items-center gap-3">
+              <Logo className="h-10 w-auto text-blue-600" />
+              <LogoText className="h-8 w-auto text-gray-500" />
+            </div>
+
             <h1 className="text-2xl sm:text-3xl font-semibold mt-2 text-white">
-              Genera preventivi eleganti in pochi click
+              Preventivi professionali in pochi click
             </h1>
             <p className="text-sm sm:text-base text-slate-300 mt-2">
               Aggiungi articoli, carica il tuo logo aziendale e scarica subito il PDF.
@@ -146,8 +158,13 @@ function ProfileHeader() {
           <div className="flex items-center gap-2 sm:gap-3 sm:ml-6">
             <button
               onClick={() => setIsModalOpen(true)}
-              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors"
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors relative"
             >
+              {/* Indicatore dati incompleti */}
+              {isIncomplete && (
+                <div className="absolute -top-1 -right-1 w-3 h-3 bg-amber-500 rounded-full border-2 border-slate-900 animate-pulse" />
+              )}
+
               {logoPreview ? (
                 <img
                   src={logoPreview}
@@ -181,6 +198,27 @@ function ProfileHeader() {
             </button>
           </div>
         </div>
+
+        {/* Banner informativo sotto l'header - visibile sempre se dati incompleti */}
+        {isIncomplete && (
+          <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/30 rounded-lg flex gap-3">
+            <AlertCircle className="w-5 h-5 text-amber-500 flex-shrink-0 mt-0.5" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-amber-500">
+                Completa il tuo profilo aziendale
+              </p>
+              <p className="text-xs text-amber-200/80 mt-1">
+                Aggiungi nome azienda, indirizzo, partita IVA e logo per creare preventivi più professionali.
+              </p>
+            </div>
+            <button
+              onClick={() => setIsModalOpen(true)}
+              className="px-3 py-1.5 bg-amber-500/20 hover:bg-amber-500/30 text-amber-500 text-xs font-medium rounded transition-colors whitespace-nowrap"
+            >
+              Completa ora
+            </button>
+          </div>
+        )}
       </header>
 
       {/* MODAL */}
@@ -285,11 +323,10 @@ function ProfileHeader() {
               <button
                 onClick={handleSave}
                 disabled={!hasChanges}
-                className={`flex-1 py-2 rounded-lg font-medium ${
-                  hasChanges
+                className={`flex-1 py-2 rounded-lg font-medium ${hasChanges
                     ? 'bg-blue-600 hover:bg-blue-700 text-white'
                     : 'bg-slate-600 text-slate-400 cursor-not-allowed'
-                }`}
+                  }`}
               >
                 Salva
               </button>

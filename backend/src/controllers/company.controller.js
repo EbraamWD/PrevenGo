@@ -1,5 +1,5 @@
 import User from "../models/User.js";
-import { cloudinaryService } from "../services/cloudinary.service.js";
+import cloudinaryService  from "../services/cloudinary.service.js";
 import fs from "fs";
 
 export const uploadCompanyLogo = async (req, res) => {

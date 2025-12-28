@@ -212,18 +212,6 @@ export default function QuoteForm() {
               </div>
             </div>
 
-            <div className="space-y-2">
-              <label className="text-sm text-slate-200">Tuo logo aziendale (opzionale)</label>
-              <label className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 rounded-xl border border-dashed border-white/15 bg-slate-900/60 px-4 py-3 text-sm text-slate-300 hover:border-emerald-400/40 cursor-pointer">
-                <div>
-                  <p className="font-medium text-white">Carica logo</p>
-                  <p className="text-xs text-slate-400">PNG, JPG, massimo 2MB</p>
-                </div>
-                <span className="rounded-lg bg-white/10 px-3 py-1 text-xs text-white self-start sm:self-auto">Scegli file</span>
-                <input type="file" className="hidden" onChange={(e) => setLogo(e.target.files[0])} />
-              </label>
-              {logo && <p className="text-xs text-emerald-200">Selezionato: {logo.name}</p>}
-            </div>
 
             <div className="flex justify-end">
               <button
