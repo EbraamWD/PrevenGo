@@ -139,9 +139,7 @@ export default function LandingPage() {
               Inizia Gratis
               <ArrowRight className="w-5 h-5" />
             </button>
-            <button className="px-8 py-4 bg-white/10 hover:bg-white/20 border border-white/20 rounded-xl font-semibold text-lg transition-all">
-              Guarda Demo
-            </button>
+
           </div>
 
           {/* Stats */}
