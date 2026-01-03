@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { User, Building2, Upload, X, LogOut, AlertCircle } from 'lucide-react';
+import { User, Building2, Upload, X, LogOut, AlertCircle, History } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import api from '../api';
@@ -156,6 +156,13 @@ function ProfileHeader() {
 
           {/* PROFILO + LOGOUT */}
           <div className="flex items-center gap-2 sm:gap-3 sm:ml-6">
+            <button
+              onClick={goToHistory}
+              className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-blue-600 hover:bg-blue-700 rounded-lg text-white"
+            >
+              <History className="w-4 h-4" />
+              <span className="hidden sm:inline">Storico</span>
+            </button>
             <button
               onClick={() => setIsModalOpen(true)}
               className="flex items-center gap-2 px-3 sm:px-4 py-2 bg-slate-800 hover:bg-slate-700 rounded-lg border border-slate-700 transition-colors relative"

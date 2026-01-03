@@ -52,7 +52,8 @@ app.use(express.urlencoded({ extended: true }));
 // 4. Routes
 app.use("/api/auth", authRoutes);
 app.use("/api/quotes", quoteRoutes);
-app.use("/api/company", quoteRoutes); // Aggiungi altre rotte qui
+app.use("/api/company", quoteRoutes);
+app.use("/api/history", quoteRoutes); // Aggiungi altre rotte qui
 // 5. Error handler
 app.use((err, req, res, next) => {
     console.error("SERVER ERROR:", err);

@@ -9,6 +9,7 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import mongoose from 'mongoose';
 import { authenticate } from '../middleware/auth.middleware.js';
+import { getUserQuotes } from '../controllers/history.controller.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -145,6 +146,12 @@ router.get('/:id/pdf', authenticate, async (req, res) => {
         return res.status(500).json({ msg: "Server error" });
     }
 });
+
+// --------------------
+// GET /history - user's quotes history
+// --------------------
+router.get('/history', authenticate, getUserQuotes);
+
 
 router.post('/companyProfile', authenticate, upload.single("logo"), async (req, res) => {
     try {
