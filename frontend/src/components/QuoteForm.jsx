@@ -22,7 +22,7 @@ export default function QuoteForm() {
     setItems(newItems);
   };
 
-  const addItem = () => setItems([...items, { description: "", quantity: 1, unitPrice: 0 }]);
+  const addItem = () => setItems([...items, { description: "", quantity: 1, unitPrice: "" }]);
   const removeItem = (index) => setItems(items.filter((_, i) => i !== index));
 
   const handleSubmit = async (e) => {
